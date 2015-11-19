@@ -134,19 +134,25 @@ static std::string UTF8StringToMultiByte(const std::string& strUtf8)
 
 static void _checkPath()
 {
-    if (s_resourcePath.empty())
-    {
-        WCHAR *pUtf16ExePath = nullptr;
-        _get_wpgmptr(&pUtf16ExePath);
+	if (0 == s_resourcePath.length())
+	{
+		wchar_t pUtf16ExePath[MAX_PATH];
+		// Will contain exe path
+		HMODULE hModule = GetModuleHandle(NULL);
+		if (hModule != NULL)
+		{
+			// When passing NULL to GetModuleHandle, it returns handle of exe itself
+			GetModuleFileName(hModule, pUtf16ExePath, (sizeof(pUtf16ExePath)));
+		}
 
-        // We need only directory part without exe
-        WCHAR *pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
+		// We need only directory part without exe
+		WCHAR *pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
 
-        char utf8ExeDir[CC_MAX_PATH] = { 0 };
-        int nNum = WideCharToMultiByte(CP_UTF8, 0, pUtf16ExePath, pUtf16DirEnd-pUtf16ExePath+1, utf8ExeDir, sizeof(utf8ExeDir), nullptr, nullptr);
+		char utf8ExeDir[CC_MAX_PATH] = { 0 };
+		int nNum = WideCharToMultiByte(CP_UTF8, 0, pUtf16ExePath, pUtf16DirEnd - pUtf16ExePath + 1, utf8ExeDir, sizeof(utf8ExeDir), nullptr, nullptr);
 
-        s_resourcePath = convertPathFormatToUnixStyle(utf8ExeDir);
-    }
+		s_resourcePath = convertPathFormatToUnixStyle(utf8ExeDir);
+	}
 }
 
 FileUtils* FileUtils::getInstance()
