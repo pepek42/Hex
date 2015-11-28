@@ -1,8 +1,6 @@
 #pragma once
 
-#include "ContentManagers\ScenarioManager.h"
-
-class HexMap;
+#include "cocos2d.h"
 
 class Scenario : public cocos2d::Layer
 {
@@ -16,8 +14,4 @@ public:
     
     // implement the "static create()" method manually
 	CREATE_FUNC(Scenario);
-
-private:
-	HexMap* m_map;
-	ScenarioManager m_scenarioManager;
 };

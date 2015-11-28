@@ -24,13 +24,7 @@
     <ClCompile Include="..\Classes\Scenes\Scenario.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ContentManagers\Hex.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ContentManagers\Hexmap.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ContentManagers\ScenarioManager.cpp">
+    <ClCompile Include="..\Classes\Mechanics\Fleet.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,13 +41,7 @@
     <ClInclude Include="..\Classes\Scenes\Scenario.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ContentManagers\Hex.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ContentManagers\Hexmap.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ContentManagers\ScenarioManager.h">
+    <ClInclude Include="..\Classes\Mechanics\Fleet.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
