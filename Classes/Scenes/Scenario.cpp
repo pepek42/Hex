@@ -30,9 +30,47 @@ bool Scenario::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	CCTMXTiledMap* p_map = CCTMXTiledMap::create("maps/hexagonal-mini.tmx");
-	this->addChild(p_map, 0);
-	Size size = p_map->getTileSize();
+	m_tileMap = CCTMXTiledMap::create("maps/hexagonal-mini.tmx");
+	this->addChild(m_tileMap, 0);
+	Size size = m_tileMap->getTileSize();
+
+	CCTMXObjectGroup* objectGroup = m_tileMap->objectGroupNamed("Objects");
+
+	if (objectGroup == NULL){
+		throw "WTF";
+	}
+
+	ValueMap spawnPoint = objectGroup->getObject("Test");
+
+	//for (auto it = spawnPoint.begin(); it != spawnPoint.end(); ++it)
+	//{
+	//	CCLOG("%s", it->first);
+	//	CCLOG("%s", it->second.asString());
+	//}
+
+	float x = spawnPoint["x"].asFloat();
+	float y = spawnPoint["y"].asFloat();
+	float height = spawnPoint["height"].asFloat();
+
+	m_fleet = new CCSprite();
+	m_fleet->initWithFile("fleet.png");
+	m_fleet->setPosition(ccp(x, y + height));
+
+	this->addChild(m_fleet);
+
+
+	//Create a "one by one" touch event listener (processes one touch at a time)
+	auto listener = EventListenerMouse::create();
+
+	//Trigger when moving touch
+	listener->onMouseDown = [](Event* event){
+		auto target = static_cast<CCSprite*>(event->getCurrentTarget());
+
+		auto e = static_cast<EventMouse*>(event);
+		
+		target->setPosition(Vec2(e->getCursorX(), e->getCursorY()));
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, m_fleet);
 
 	//Vector<Node*> pChildrenArray = Pmap->getChildren();
 
@@ -43,7 +81,6 @@ bool Scenario::init()
     
     return true;
 }
-
 
 void Scenario::menuCloseCallback(Ref* pSender)
 {
