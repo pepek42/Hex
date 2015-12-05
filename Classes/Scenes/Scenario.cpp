@@ -32,6 +32,7 @@ bool Scenario::init()
 
 	CCTMXTiledMap* p_map = CCTMXTiledMap::create("maps/hexagonal-mini.tmx");
 	this->addChild(p_map, 0);
+	Size size = p_map->getTileSize();
 
 	//Vector<Node*> pChildrenArray = Pmap->getChildren();
 
