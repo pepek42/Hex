@@ -30,7 +30,7 @@ bool Scenario::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	CCTMXTiledMap* p_map = CCTMXTiledMap::create("maps/hexagonal-mini.tmx");
+	CCTMXTiledMap* p_map = CCTMXTiledMap::create("maps/tileMap.tmx");
 	this->addChild(p_map, 0);
 
 	//Vector<Node*> pChildrenArray = Pmap->getChildren();
