@@ -7,8 +7,9 @@
 class Scenario : public cocos2d::Layer
 {
 private:
-	cocos2d::CCTMXTiledMap* m_tileMap;
-	cocos2d::CCSprite* m_fleet;
+	cocos2d::CCTMXTiledMap*		m_tileMap;
+	cocos2d::CCTMXLayer*		m_tileLayer;
+	cocos2d::CCSprite*			m_fleet;
 public:
     static cocos2d::Scene* createScene();
 
@@ -16,6 +17,8 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+
+	void onMouseDown(cocos2d::Event *e);
     
     // implement the "static create()" method manually
 	CREATE_FUNC(Scenario);
