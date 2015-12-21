@@ -30,56 +30,37 @@ bool Scenario::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	m_tileMap = CCTMXTiledMap::create("maps/hexagonal-mini.tmx");
+	m_tileMap = CCTMXTiledMap::create("maps/tileMap.tmx");
+	m_tileLayer = m_tileMap->getLayer("Hexes");
 	this->addChild(m_tileMap, 0);
-	Size size = m_tileMap->getTileSize();
-
-	CCTMXObjectGroup* objectGroup = m_tileMap->objectGroupNamed("Objects");
-
-	if (objectGroup == NULL){
-		throw "WTF";
-	}
-
-	ValueMap spawnPoint = objectGroup->getObject("Test");
-
-	//for (auto it = spawnPoint.begin(); it != spawnPoint.end(); ++it)
-	//{
-	//	CCLOG("%s", it->first);
-	//	CCLOG("%s", it->second.asString());
-	//}
-
-	float x = spawnPoint["x"].asFloat();
-	float y = spawnPoint["y"].asFloat();
-	float height = spawnPoint["height"].asFloat();
 
 	m_fleet = new CCSprite();
 	m_fleet->initWithFile("fleet.png");
-	m_fleet->setPosition(ccp(x, y + height));
+	m_fleet->setPosition(ccp(100, 100));
 
 	this->addChild(m_fleet);
 
+	auto mouseListener = EventListenerMouse::create();
+	mouseListener->onMouseDown = CC_CALLBACK_1(Scenario::onMouseDown, this);
 
-	//Create a "one by one" touch event listener (processes one touch at a time)
-	auto listener = EventListenerMouse::create();
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
-	//Trigger when moving touch
-	listener->onMouseDown = [](Event* event){
-		auto target = static_cast<CCSprite*>(event->getCurrentTarget());
-
-		auto e = static_cast<EventMouse*>(event);
-		
-		target->setPosition(Vec2(e->getCursorX(), e->getCursorY()));
-	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, m_fleet);
-
-	//Vector<Node*> pChildrenArray = Pmap->getChildren();
-
-	//for (auto it = pChildrenArray.begin(); it != pChildrenArray.end(); ++it)
-	//{
-
-	//}
-    
     return true;
+}
+
+void Scenario::onMouseDown(Event *e)
+{
+	Node* target = e->getCurrentTarget();
+	EventMouse* mouseEvent = (EventMouse*)e;
+	Vec2 location = mouseEvent->getLocation();
+	Size layerSize = m_tileLayer->getLayerSize();
+	for (int x = 0; x < layerSize.width; ++x)
+	{
+		for (int y = 0; y < layerSize.height; ++y)
+		{
+			Sprite* tile = m_tileLayer->tileAt(Vec2(x, y));
+		}
+	}
 }
 
 void Scenario::menuCloseCallback(Ref* pSender)
