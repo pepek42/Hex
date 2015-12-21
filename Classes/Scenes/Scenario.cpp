@@ -32,17 +32,9 @@ bool Scenario::init()
 
 	CCTMXTiledMap* p_map = CCTMXTiledMap::create("maps/tileMap.tmx");
 	this->addChild(p_map, 0);
-
-	//Vector<Node*> pChildrenArray = Pmap->getChildren();
-
-	//for (auto it = pChildrenArray.begin(); it != pChildrenArray.end(); ++it)
-	//{
-
-	//}
     
     return true;
 }
-
 
 void Scenario::menuCloseCallback(Ref* pSender)
 {
