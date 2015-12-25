@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "../Mechanics/Fleet.h"
 
 #define COCOS2D_DEBUG 1
 
@@ -9,7 +9,8 @@ class Scenario : public cocos2d::Layer
 private:
 	cocos2d::CCTMXTiledMap*		m_tileMap;
 	cocos2d::CCTMXLayer*		m_tileLayer;
-	cocos2d::CCSprite*			m_fleet;
+	cocos2d::Vector<Fleet*>		m_vFleets;
+	Fleet*						m_selectedFleet;
 public:
     static cocos2d::Scene* createScene();
 
