@@ -1,8 +1,9 @@
 #include "Scenario.h"
+#include "../Mechanics/Map/ExtendedMap.h"
 
 USING_NS_CC;
 
-Scene* Scenario::createScene()
+Scene* HexGame::Scenario::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
@@ -18,7 +19,7 @@ Scene* Scenario::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool Scenario::init()
+bool HexGame::Scenario::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -36,7 +37,10 @@ bool Scenario::init()
 	m_tileLayer = m_tileMap->getLayer("Hexes");
 	this->addChild(m_tileMap, 0);
 
-	Fleet* testFleet = new Fleet(random() % 5 + 1, 1, 48, true);
+	m_extendedMap = ExtendedMap::create("maps/extendedMap.xml");
+	m_tileMap->addChild(m_extendedMap);
+
+	Fleet* testFleet = new Fleet(random() % 5 + 1, 1, 48, true,1);
 	testFleet->initWithFile("fleet.png");
 	testFleet->setPosition(ccp(100, 100));
 	this->addChild(testFleet);
@@ -51,7 +55,7 @@ bool Scenario::init()
     return true;
 }
 
-void Scenario::onMouseDown(Event *e)
+void HexGame::Scenario::onMouseDown(Event *e)
 {
 	Node* target = e->getCurrentTarget();
 	EventMouse* mouseEvent = (EventMouse*)e;
@@ -102,7 +106,7 @@ void Scenario::onMouseDown(Event *e)
 	}
 }
 
-void Scenario::menuCloseCallback(Ref* pSender)
+void HexGame::Scenario::menuCloseCallback(Ref* pSender)
 {
 	for (auto it = m_vFleets.begin(); it != m_vFleets.end(); ++it)
 	{
