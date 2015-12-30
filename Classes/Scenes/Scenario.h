@@ -10,11 +10,8 @@ namespace HexGame
 	class Scenario : public cocos2d::Layer
 	{
 	private:
-		cocos2d::CCTMXTiledMap*		m_tileMap;
 		ExtendedMap*				m_extendedMap;
 		cocos2d::CCTMXLayer*		m_tileLayer;
-		cocos2d::Vector<Fleet*>		m_vFleets;			// michal ppk
-		Fleet*						m_selectedFleet;	// michal ppk
 	public:
 		static cocos2d::Scene* createScene();
 

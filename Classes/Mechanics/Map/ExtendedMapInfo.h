@@ -4,11 +4,13 @@
 namespace HexGame
 {
 	class ExtendedMap;
+	class Fleet;
 	class ExtendedMapInfo : public cocos2d::Ref, public cocos2d::SAXDelegator
 	{
 	private:
-		std::string m_sCurrentString;
+		std::string					m_sCurrentString;
 		ExtendedMap*				m_pExtendedMap;
+		std::vector<Fleet*>			m_vFleets;
 	public:
 		ExtendedMapInfo();
 		virtual ~ExtendedMapInfo();

@@ -3,6 +3,7 @@
 #include "CCFileUtils.h"
 #include "CCSAXParser.h"
 #include "ExtendedMap.h"
+#include "../Player.h"
 
 using namespace cocos2d;
 using namespace HexGame;
@@ -75,8 +76,20 @@ void ExtendedMapInfo::startElement(void *ctx, const char *name, const char **att
 	}
 	if (elementName == "fleet")
 	{
-		m_pExtendedMap->addFleet(new Fleet(attributeDict["strength"].asFloat(), attributeDict["positionX"].asInt(),
+		m_vFleets.push_back(new Fleet(attributeDict["strength"].asFloat(), attributeDict["positionX"].asInt(),
 			attributeDict["positionY"].asInt(), attributeDict["canMove"].asBool(), attributeDict["playerID"].asInt()));
+	}
+	else if (elementName == "overallInfo")
+	{
+		m_pExtendedMap->setPlayerCount(attributeDict["playerCount"].asInt());
+		m_pExtendedMap->setCurrentPlayerTurnID(attributeDict["currentPlayerTurnID"].asInt());
+	}
+	else if (elementName == "player")
+	{
+		m_pExtendedMap->addPlayer(new Player(
+			attributeDict["ID"].asInt(),
+			Color3B(attributeDict["colorR"].asByte(), attributeDict["colorG"].asByte(), attributeDict["colorB"].asByte())
+			));
 	}
 }
 
@@ -86,9 +99,13 @@ void ExtendedMapInfo::endElement(void *ctx, const char *name)
 	ExtendedMapInfo *tmxMapInfo = this;
 	std::string elementName = name;
 
-	//if (elementName == "data")
-	//{
-	//}
+	if (elementName == "extendedMap")
+	{
+		for (auto it = m_vFleets.begin(); it != m_vFleets.end(); ++it)
+		{
+			m_pExtendedMap->addFleet(*it);
+		}
+	}
 }
 
 void ExtendedMapInfo::textHandler(void *ctx, const char *ch, int len)

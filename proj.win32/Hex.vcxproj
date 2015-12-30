@@ -149,6 +149,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Mechanics\Map\ExtendedMap.cpp" />
     <ClCompile Include="..\Classes\Mechanics\Map\ExtendedMapInfo.cpp" />
     <ClCompile Include="..\Classes\Mechanics\Map\Hex.cpp" />
+    <ClCompile Include="..\Classes\Mechanics\Player.cpp" />
     <ClCompile Include="..\Classes\Scenes\Scenario.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -158,6 +159,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Mechanics\Map\ExtendedMap.h" />
     <ClInclude Include="..\Classes\Mechanics\Map\ExtendedMapInfo.h" />
     <ClInclude Include="..\Classes\Mechanics\Map\Hex.h" />
+    <ClInclude Include="..\Classes\Mechanics\Player.h" />
     <ClInclude Include="..\Classes\Scenes\Scenario.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

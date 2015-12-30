@@ -31,21 +31,10 @@ bool HexGame::Scenario::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	m_selectedFleet = nullptr;
-
-	m_tileMap = CCTMXTiledMap::create("maps/tileMap.tmx");
-	m_tileLayer = m_tileMap->getLayer("Hexes");
-	this->addChild(m_tileMap, 0);
-
-	m_extendedMap = ExtendedMap::create("maps/extendedMap.xml");
-	m_tileMap->addChild(m_extendedMap);
-
-	Fleet* testFleet = new Fleet(random() % 5 + 1, 1, 48, true,1);
-	testFleet->initWithFile("fleet.png");
-	testFleet->setPosition(ccp(100, 100));
-	this->addChild(testFleet);
-
-	m_vFleets.pushBack(testFleet);
+	m_extendedMap = ExtendedMap::create("maps/tileMap.tmx", "maps/extendedMap.xml", this);
+	m_tileLayer = m_extendedMap->getLayer("Hexes");
+	this->addChild(m_extendedMap, 0);
+	CCASSERT(m_extendedMap->getParent() == this, "Scenario is not extended map's parent!");
 
 	auto mouseListener = EventListenerMouse::create();
 	mouseListener->onMouseDown = CC_CALLBACK_1(Scenario::onMouseDown, this);
@@ -59,61 +48,12 @@ void HexGame::Scenario::onMouseDown(Event *e)
 {
 	Node* target = e->getCurrentTarget();
 	EventMouse* mouseEvent = (EventMouse*)e;
-	Size layerSize = m_tileLayer->getLayerSize();
-	Size tileSize = m_tileMap->getTileSize();
-	float mouseX = mouseEvent->getCursorX();
-	float mouseY = mouseEvent->getCursorY();
-
-	for (auto it = m_vFleets.begin(); it != m_vFleets.end(); ++it)
-	{
-		Vec2 basePosition = (*it)->getPosition();
-		Size spriteSize = (*it)->getContentSize();
-		basePosition.x -= (spriteSize.width / 2);
-		basePosition.y -= (spriteSize.height / 2);
-		if (basePosition.x < mouseX && basePosition.y < mouseY)
-		{
-			if (mouseEvent->getCursorX() < (basePosition.x + spriteSize.width) && mouseEvent->getCursorY() < (basePosition.y + spriteSize.height))
-			{
-				if (m_selectedFleet == *it) {
-					m_selectedFleet = nullptr;
-				}
-				else {
-					m_selectedFleet = *it;
-				}
-				return;
-			}
-		}
-	}
-	if (m_selectedFleet == nullptr || !m_selectedFleet->getCanMove())
-		return;
-	for (int x = 0; x < layerSize.width; ++x)
-	{
-		for (int y = 0; y < layerSize.height; ++y)
-		{
-			Sprite* tile = m_tileLayer->tileAt(Vec2(x, y));
-			Vec2 spriteCenter = Vec2(tile->getPositionX() + tileSize.width / 2, tile->getPositionY() + tileSize.height / 2);
-			// michal ppk to do tile detection
-			Vec2 diff = spriteCenter - ccp(mouseX, mouseY);
-			if (diff.length() < tileSize.height / 2)
-			{
-				m_selectedFleet->setPositionInTiles(x, y);
-				m_selectedFleet->setPosition(spriteCenter.x, spriteCenter.y);
-				m_selectedFleet->setCanMove(false);
-				m_selectedFleet = nullptr;
-				return;
-			}
-		}
-	}
+	
+	m_extendedMap->actionAt(ccp(mouseEvent->getCursorX(), mouseEvent->getCursorY()));
 }
 
 void HexGame::Scenario::menuCloseCallback(Ref* pSender)
 {
-	for (auto it = m_vFleets.begin(); it != m_vFleets.end(); ++it)
-	{
-		delete *it;
-	}
-	m_vFleets.clear();
-
     Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

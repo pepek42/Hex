@@ -11,6 +11,8 @@ namespace HexGame
 		void setPositionInTiles(int _positionX, int _positionY);
 		void setCanMove(bool _canMove);
 		bool getCanMove();
+		int getPlayerID() { return m_playerID; };
+		cocos2d::Vec2 getPositionInHexes() { return cocos2d::Vec2(m_positionHex.first, m_positionHex.second); };
 	private:
 		int m_playerID;
 		float m_strenght;
