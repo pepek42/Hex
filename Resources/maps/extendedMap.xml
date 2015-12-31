@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extendedMap>
+	<fleet strength="6" playerID="1" positionX="2" positionY="18" canMove="1"></fleet>
+	<fleet strength="8" playerID="2" positionX="2" positionY="17" canMove="1"></fleet>
+	<fleet strength="6" playerID="1" positionX="3" positionY="18" canMove="2"></fleet>
+	<overallInfo playerCount="2" currentPlayerTurnID="1"></overallInfo>
+	<player ID="1" colorR="255" colorG="0" colorB="0"></player>
+	<player ID="2" colorR="0" colorG="0" colorB="255"></player>
+</extendedMap>

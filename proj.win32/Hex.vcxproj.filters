@@ -10,6 +10,18 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scenes">
+      <UniqueIdentifier>{d0b9ff5e-11bb-414d-b301-08747fb507f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Mechanics">
+      <UniqueIdentifier>{6ba5fcf7-6b9b-403a-91b0-e1efac94963a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Mechanics\Entities">
+      <UniqueIdentifier>{35df3644-0aaa-4e13-a354-1b36849e4364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Mechanics\Map">
+      <UniqueIdentifier>{49e767e8-8090-4031-a172-dbeb3f436e83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -18,14 +30,23 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Mechanics\Map\ExtendedMap.cpp">
+      <Filter>src\Mechanics\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Mechanics\Map\ExtendedMapInfo.cpp">
+      <Filter>src\Mechanics\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Mechanics\Map\Hex.cpp">
+      <Filter>src\Mechanics\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Scenes\Scenario.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Mechanics\Fleet.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Mechanics\Entities\Fleet.cpp">
+      <Filter>src\Mechanics\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Mechanics\Player.cpp">
+      <Filter>src\Mechanics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -35,14 +56,23 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Mechanics\Map\ExtendedMap.h">
+      <Filter>src\Mechanics\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Mechanics\Map\ExtendedMapInfo.h">
+      <Filter>src\Mechanics\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Mechanics\Map\Hex.h">
+      <Filter>src\Mechanics\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Scenes\Scenario.h">
-      <Filter>src</Filter>
+      <Filter>src\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Mechanics\Fleet.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Mechanics\Entities\Fleet.h">
+      <Filter>src\Mechanics\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Mechanics\Player.h">
+      <Filter>src\Mechanics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

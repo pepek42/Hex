@@ -1,25 +1,28 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "../Mechanics/Entities/Fleet.h"
 
 #define COCOS2D_DEBUG 1
 
-class Scenario : public cocos2d::Layer
+namespace HexGame
 {
-private:
-	cocos2d::CCTMXTiledMap*		m_tileMap;
-	cocos2d::CCTMXLayer*		m_tileLayer;
-	cocos2d::CCSprite*			m_fleet;
-public:
-    static cocos2d::Scene* createScene();
+	class ExtendedMap;
+	class Scenario : public cocos2d::Layer
+	{
+	private:
+		ExtendedMap*				m_extendedMap;
+		cocos2d::CCTMXLayer*		m_tileLayer;
+	public:
+		static cocos2d::Scene* createScene();
 
-    virtual bool init();
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
+		virtual bool init();
 
-	void onMouseDown(cocos2d::Event *e);
-    
-    // implement the "static create()" method manually
-	CREATE_FUNC(Scenario);
-};
+		// a selector callback
+		void menuCloseCallback(cocos2d::Ref* pSender);
+
+		void onMouseDown(cocos2d::Event *e);
+
+		// implement the "static create()" method manually
+		CREATE_FUNC(Scenario);
+	};
+}

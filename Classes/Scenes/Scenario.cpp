@@ -1,8 +1,9 @@
 #include "Scenario.h"
+#include "../Mechanics/Map/ExtendedMap.h"
 
 USING_NS_CC;
 
-Scene* Scenario::createScene()
+Scene* HexGame::Scenario::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
@@ -18,7 +19,7 @@ Scene* Scenario::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool Scenario::init()
+bool HexGame::Scenario::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -30,15 +31,10 @@ bool Scenario::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	m_tileMap = CCTMXTiledMap::create("maps/tileMap.tmx");
-	m_tileLayer = m_tileMap->getLayer("Hexes");
-	this->addChild(m_tileMap, 0);
-
-	m_fleet = new CCSprite();
-	m_fleet->initWithFile("fleet.png");
-	m_fleet->setPosition(ccp(100, 100));
-
-	this->addChild(m_fleet);
+	m_extendedMap = ExtendedMap::create("maps/tileMap.tmx", "maps/extendedMap.xml", this);
+	m_tileLayer = m_extendedMap->getLayer("Hexes");
+	this->addChild(m_extendedMap, 0);
+	CCASSERT(m_extendedMap->getParent() == this, "Scenario is not extended map's parent!");
 
 	auto mouseListener = EventListenerMouse::create();
 	mouseListener->onMouseDown = CC_CALLBACK_1(Scenario::onMouseDown, this);
@@ -48,22 +44,15 @@ bool Scenario::init()
     return true;
 }
 
-void Scenario::onMouseDown(Event *e)
+void HexGame::Scenario::onMouseDown(Event *e)
 {
 	Node* target = e->getCurrentTarget();
 	EventMouse* mouseEvent = (EventMouse*)e;
-	Vec2 location = mouseEvent->getLocation();
-	Size layerSize = m_tileLayer->getLayerSize();
-	for (int x = 0; x < layerSize.width; ++x)
-	{
-		for (int y = 0; y < layerSize.height; ++y)
-		{
-			Sprite* tile = m_tileLayer->tileAt(Vec2(x, y));
-		}
-	}
+	
+	m_extendedMap->actionAt(ccp(mouseEvent->getCursorX(), mouseEvent->getCursorY()));
 }
 
-void Scenario::menuCloseCallback(Ref* pSender)
+void HexGame::Scenario::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
 
