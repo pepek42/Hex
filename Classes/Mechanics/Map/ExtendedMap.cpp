@@ -3,8 +3,10 @@
 #include "../Entities/Fleet.h"
 #include "Scenes\Scenario.h"
 #include "../Player.h"
+#include <map>
 
 using namespace HexGame;
+using namespace std;
 
 ExtendedMap::ExtendedMap()
 	: CCTMXTiledMap()
@@ -142,17 +144,94 @@ void ExtendedMap::updateMap()
 {
 	Size layerSize = m_tileLayer->getLayerSize();
 
+	//hexID: ally, netral, hostile
+	map<int, tuple<int, int, int>> hexUnitesPower;
+
 	for (auto it = m_vFleets.begin(); it != m_vFleets.end(); ++it)
 	{
 		int id = (*it)->getPlayerID();
+
+		Vec2 positionInHex = (*it)->getPositionInHexes();
+		int positionIdex = positionInHex.x + positionInHex.y * layerSize.width;
+		Relation relation = getRelationWithPlayer(id);
+
 		Player* player = (*m_players.find(id)).second;
 		Size spriteSize = (*it)->getContentSize();
-		Vec2 positionInHex = (*it)->getPositionInHexes();
-		Sprite* tile = m_tileLayer->getTileAt(positionInHex);
-		float swap = (id == m_currentPlayerTurnID ? -spriteSize.width : 0);
-		(*it)->setPosition(tile->getPositionX() + _tileSize.width / 2 + swap, tile->getPositionY() + _tileSize.height / 2);
-		(*it)->setColor(player->getColor());
 
+		Vec2 swap;
+		if (hexUnitesPower.find(positionIdex) == hexUnitesPower.end())
+		{
+			hexUnitesPower[positionIdex] = make_tuple(0, 0, 0);
+		}
+
+		switch (relation)
+		{
+		case Relation::Ally:
+			get<0>(hexUnitesPower[positionIdex]) += (*it)->getStrength();
+			swap = ccp(-spriteSize.width, 0);
+			break;
+		case Relation::Neutral:
+			//@TODO michal ppk neutral
+			get<1>(hexUnitesPower[positionIdex]) += (*it)->getStrength();
+			swap = ccp(0, 0);
+			break;
+		case Relation::Hostile:
+			get<2>(hexUnitesPower[positionIdex]) += (*it)->getStrength();
+			swap = ccp(0, 0);
+			break;
+		}
+		
+		Sprite* tile = m_tileLayer->getTileAt(positionInHex);
+		(*it)->setPosition(tile->getPositionX() + _tileSize.width / 2 + swap.x, tile->getPositionY() + _tileSize.height / 2 + swap.y);
+		(*it)->setColor(player->getColor());
+	}
+
+	for (auto it = m_strengthValueNames.begin(); it != m_strengthValueNames.end(); ++it)
+	{
+		removeChildByName(*it);
+	}
+	m_strengthValueNames.clear();
+
+	for (auto it = hexUnitesPower.begin(); it != hexUnitesPower.end(); ++it)
+	{
+		Vec2 positionInHex;
+		int layerWidth = layerSize.width;
+		positionInHex.x = it->first % layerWidth;
+		positionInHex.y = it->first / layerWidth;
+		//@TODO zrobic kontener na kazdy typ floty w hexie i tp?
+		Sprite* tile = m_tileLayer->getTileAt(positionInHex);
+		Vec2 spriteMiddle = ccp(tile->getPositionX() + _tileSize.width / 2, tile->getPositionY() + _tileSize.height / 2);
+		string namePre = to_string(it->first);
+		if (get<0>(it->second) > 0)
+		{
+			Label* ally = Label::createWithSystemFont(to_string(get<0>(it->second)), "Arial", 10);
+			ally->setAnchorPoint(Vec2(0, 0));
+			string name = namePre + "_ally";
+			ally->setName(name);
+			addChild(ally);
+			ally->setPosition(spriteMiddle + Vec2(0,20));
+			m_strengthValueNames.push_back(name);
+		}
+		if (get<1>(it->second) > 0)
+		{
+			Label* neutral = Label::createWithSystemFont(to_string(get<0>(it->second)), "Arial", 10);
+			neutral->setAnchorPoint(Vec2(0, 0));
+			string name = namePre + "_neutral";
+			neutral->setName(name);
+			addChild(neutral);
+			neutral->setPosition(spriteMiddle + Vec2(0, 20));
+			m_strengthValueNames.push_back(name);
+		}
+		if (get<2>(it->second) > 0)
+		{
+			Label* hostile = Label::createWithSystemFont(to_string(get<2>(it->second)), "Arial", 10);
+			hostile->setAnchorPoint(Vec2(0, 0));
+			string name = namePre + "_hostile";
+			hostile->setName(name);
+			addChild(hostile);
+			hostile->setPosition(spriteMiddle + Vec2(20, 20));
+			m_strengthValueNames.push_back(name);
+		}
 	}
 }
 
@@ -162,4 +241,31 @@ void ExtendedMap::addPlayer(Player* _player)
 	CCASSERT(1 <= id && id <= m_playerCount, "Player ID exiding player count");
 	CCASSERT(m_players.find(id) == m_players.end(), std::string("Player with ID =" + std::to_string(id) + " already exists").c_str());
 	m_players[id] = _player;
+}
+
+//@TODO michal ppk 
+Vec2 ExtendedMap::positionToHexPosition(Vec2 pointPosition)
+{
+	Size layerSize = m_tileLayer->getLayerSize();
+
+	for (int x = 0; x < layerSize.width; ++x)
+	{
+		for (int y = 0; y < layerSize.height; ++y)
+		{
+			Sprite* tile = m_tileLayer->tileAt(Vec2(x, y));
+			Vec2 spriteCenter = Vec2(tile->getPositionX() + _tileSize.width / 2, tile->getPositionY() + _tileSize.height / 2);
+			// michal ppk to do tile detection
+			Vec2 diff = spriteCenter - ccp(pointPosition.x, pointPosition.y);
+			if (diff.length() < _tileSize.height / 2)
+			{
+				return ccp(x, y);
+			}
+		}
+	}
+}
+
+//@TODO michal ppk 
+Relation ExtendedMap::getRelationWithPlayer(int playerID)
+{
+	return (playerID == m_currentPlayerTurnID ? Relation::Ally : Relation::Hostile);
 }

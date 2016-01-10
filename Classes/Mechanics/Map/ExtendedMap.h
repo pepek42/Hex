@@ -11,16 +11,26 @@ namespace HexGame
 	class Fleet;
 	class Scenario;
 	class Player;
+	class Hex;
+
+	enum class Relation
+	{
+		Ally,
+		Neutral,
+		Hostile
+	};
+
 	class ExtendedMap : public cocos2d::CCTMXTiledMap
 	{
 	protected:
-		Vector<Fleet*>				m_vFleets;
 		Fleet*						m_selectedFleet;
 		CCTMXLayer*					m_tileLayer;
 		Scenario*					m_parentScene;
 		int							m_playerCount;
 		int							m_currentPlayerTurnID;
-		std::map<int, Player*>	m_players;
+		std::map<int, Player*>		m_players;
+		cocos2d::Vector<Fleet*>		m_vFleets;
+		std::vector<std::string>	m_strengthValueNames;
 	public:
 		ExtendedMap();
 		virtual ~ExtendedMap();
@@ -40,6 +50,12 @@ namespace HexGame
 		void addPlayer(Player* _player);
 
 		void updateMap();
+
+		Vec2 positionToHexPosition(Vec2 pointPosition);
+
+		Relation getRelationWithPlayer(int playerID);
+
+		//void endTurn();
 	};
 }
 

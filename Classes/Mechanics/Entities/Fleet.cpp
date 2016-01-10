@@ -3,7 +3,7 @@
 using namespace cocos2d;
 using namespace HexGame;
 
-Fleet::Fleet(float _strength, int _positionX, int _positionY, bool _canMove, int _playerID)
+Fleet::Fleet(int _strength, int _positionX, int _positionY, bool _canMove, int _playerID)
 	: cocos2d::Sprite(), m_strenght(_strength), m_positionHex(_positionX, _positionY), m_canMove(_canMove), m_playerID(_playerID)
 {
 	initWithFile("fleet.png");
